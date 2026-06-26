@@ -48,7 +48,36 @@ try {
 }
 };
 
+const getIssueByID=async (req:Request, res:Response)=> {
+  
+  try {
+    const {id}=req.params;
+  const user=await issueServices.getIssueByIDFromDB(id)
+  globalResponseHandler(res,{
+      statusCode: 200,
+      success: true,
+      message: "Issue retrieved successfully",
+      data: user,
+    });
+  } catch (error:any) {
+    globalResponseHandler(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+
+}
+
+const updateIssueByID=async (req:Request, res:Response)=> {
+const {id}=req.params;
+
+}
+
 export const issueController = {
   createIssue,
   getAllIssues,
+  getIssueByID,
+  updateIssueByID
 };

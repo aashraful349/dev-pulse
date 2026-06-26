@@ -152,7 +152,46 @@ const getAllIssuesFromDB = async (reqQuery: any) => {
 }
 };
 
+
+const getIssueByIDFromDB = async (issueID:any) => {
+  const result = await pool.query(
+    `
+    SELECT * FROM issues
+    WHERE id = $1
+    `,
+    [issueID]
+  );
+  const reporterDetails = await pool.query(
+    `
+    SELECT id, name, role
+    FROM users
+    WHERE id = $1
+    `,
+    [result.rows[0].reporter_id]
+  );
+
+  const data = {
+    id: result.rows[0].id,
+    title: result.rows[0].title,
+    description: result.rows[0].description,
+    type: result.rows[0].type,
+    status: result.rows[0].status,
+    reporter: reporterDetails.rows[0],
+    created_at: result.rows[0].created_at,
+    updated_at: result.rows[0].updated_at,
+  };
+
+  return data;
+}
+
+const updateIssueByIDFromDB = async (issueID: any, payload: any) => {
+
+}
+
+
 export const issueServices = {
   createIssueIntoDB,
   getAllIssuesFromDB,
+  getIssueByIDFromDB,
+  updateIssueByIDFromDB
 };
