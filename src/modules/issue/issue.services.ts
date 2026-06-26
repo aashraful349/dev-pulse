@@ -10,7 +10,6 @@ const createIssueIntoDB = async (payload: IIssue, reporterID: number) => {
     `,
     [title, description, type, reporterID],
   );
-  // console.log(result.rows);
   return result.rows[0];
 };
 

@@ -96,7 +96,7 @@ const deleteIssueByID=async (req:Request, res:Response)=> {
   try {
     const result=await issueServices.deleteIssueFromDB(id)
     globalResponseHandler(res,{
-        statusCode: 200,
+        statusCode: 204,
         success: true,
         message: "Issue deleted successfully",
       });
