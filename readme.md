@@ -3,7 +3,7 @@
 DevPulse is an internal tech issue and feature tracker built with Node.js, TypeScript, Express, PostgreSQL, and raw SQL. It allows team members to register, log in, create issues, view reported work, and manage issue updates based on their role.
 
 ```
-**Live URL:** dev-pulse-luffy9.vercel.app
+**Live URL:** https://dev-pulse-phi-brown.vercel.app/
 **Author**: Md.Ashraful Alam Rayhan
 ```
 
