@@ -1,17 +1,24 @@
 import type { Request, Response } from "express";
 import { issueServices } from "./issue.services";
 import { globalResponseHandler } from "../../utility";
-import { allowedStatuses } from "../../types";
+import { allowedStatuses, allowedTypes } from "../../types";
 
 const createIssue = async (req: Request, res: Response) => {
   const reporterID = req.user?.id;
   try {
-    const { type } = req.body;
-    if (type && !allowedStatuses.includes(type)) {
+    const { type,description } = req.body;
+    if (type && !allowedTypes.includes(type)) {
       return globalResponseHandler(res, {
         statusCode: 400,
         success: false,
         message: "Invalid type value. Allowed values are: bug, feature_request",
+      });
+    }
+    if(description.length < 20){
+      return globalResponseHandler(res, {
+        statusCode: 400,
+        success: false,
+        message: "Description is too short. Please provide a more detailed description.",
       });
     }
     const result = await issueServices.createIssueIntoDB(req.body, reporterID);

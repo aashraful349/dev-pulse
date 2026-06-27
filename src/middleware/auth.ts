@@ -28,19 +28,20 @@ const auth = (...roles: ROLES[]) => {
       );
 
       if (userData.rows.length === 0) {
-        return globalResponseHandler(res,{
+        return globalResponseHandler(res, {
           statusCode: 404,
           success: false,
           message: "User not found",
-        })
+        });
       }
 
       const user = userData.rows[0];
       if (roles.length && !roles.includes(user.role)) {
-        return globalResponseHandler(res,{
+        return globalResponseHandler(res, {
           statusCode: 403,
           success: false,
-          message: "Forbidden: You do not have permission to access this resource",
+          message:
+            "Forbidden: You do not have permission to access this resource",
         });
       }
       req.user = decodedToken;
@@ -51,7 +52,6 @@ const auth = (...roles: ROLES[]) => {
         statusCode: 500,
         success: false,
         message: "Internal Server Error",
-        error: error,
       });
     }
   };
