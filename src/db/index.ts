@@ -1,5 +1,6 @@
 import {Pool} from "pg";
 import config from "../config";
+import { globalResponseHandler } from "../utility";
 
 export const pool=new Pool({
     connectionString:config.connectionString,
@@ -36,6 +37,6 @@ export const initDB=async()=>{
         `
     )
     } catch (error) {
-        console.log(error);
+        throw new Error("Database initialization failed: " + (error as Error).message);
     }
 }

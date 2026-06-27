@@ -1,11 +1,33 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { authServices } from "./auth.services";
-import globalErrorHandler from "../../middleware/globalErrorHandler";
-import app from "../../app";
 import { globalResponseHandler } from "../../utility";
+import { allowedRoles } from "../../types";
 
 const userRegistration = async (req: Request, res: Response) => {
+   const { name, email, password, role } = req.body;
+   if(!name || !email || !password){
+    return globalResponseHandler(res, {
+      statusCode: 400,
+      success: false,
+      message: "Missing required fields: name, email, and password are required.",
+    });
+   }
+if(await authServices.emailExistsInDB(email)){
+  return globalResponseHandler(res, {
+    statusCode: 400,
+    success: false,
+    message: "Email taken. Please use a different email.",
+  });
+}
   try {
+    const {role}=req.body;
+    if(role && !allowedRoles.includes(role)) {
+      return globalResponseHandler(res, {
+        statusCode: 400,
+        success: false,
+        message: "Invalid role value. Allowed values are: contributor, maintainer",
+      });
+    }
     const result = await authServices.registerUserIntoDB(req.body);
     globalResponseHandler(res, {
       statusCode: 201,
@@ -38,7 +60,6 @@ const loginUser=async(req:Request,res:Response)=>{
             statusCode:400,
             success:false,
             message:error.message,
-            error:error
         })
     }
 }

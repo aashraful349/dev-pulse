@@ -1,6 +1,6 @@
 import type { Request } from "express";
 import { pool } from "../../db";
-import { userRole, type IIssue } from "../../types";
+import { userRole, type IIssue, type IUpdate } from "../../types";
 
 const createIssueIntoDB = async (payload: IIssue, reporterID: number) => {
   const { title, description, type } = payload;
@@ -19,7 +19,7 @@ const getAllIssuesFromDB = async (reqQuery: any) => {
     `
     SELECT *
     FROM issues
-    ORDER BY created_at ${reqQuery.sort === "newest" ? "DESC" : "ASC"}
+    ORDER BY created_at ${reqQuery.sort === "oldest" ? "ASC" : "DESC"}
     `
   );
 
@@ -184,8 +184,9 @@ const getIssueByIDFromDB = async (issueID:any) => {
   return data;
 }
 
-const updateIssueByIDFromDB = async (req:Request,issueID: any, payload: any) => {
-  const { title, description, type} = payload;
+const updateIssueByIDFromDB = async (req:Request,issueID: any, payload:IUpdate) => {
+  const { title, description, type,status} = payload;
+  
   const issueData=await pool.query(
     `
     SELECT * FROM issues
@@ -203,15 +204,16 @@ const updateIssueByIDFromDB = async (req:Request,issueID: any, payload: any) => 
 
   const role=req.user?.role;
   const email=req.user?.email;
-  if(email===userData.rows[0].email && role==="maintainer"){
+  if(role==="maintainer"){
     const result = await pool.query(
       `
       UPDATE issues
-      SET title = COALESCE($1,title), description = COALESCE($2,description), type = COALESCE($3,type), updated_at = NOW()
-      WHERE id = $4
+      SET title = COALESCE($1,title), description = COALESCE($2,description), type = COALESCE($3,type), status = COALESCE($4,status),
+      updated_at = NOW()
+      WHERE id = $5
       RETURNING id, title, description, type, reporter_id, created_at, updated_at
       `,
-      [title, description, type, issueID]
+      [title, description, type,status ,issueID]
     );
     return result.rows[0];
   }
@@ -243,9 +245,6 @@ const deleteIssueFromDB = async (issueID: any) => {
   );
   if(result.rows.length===0){
     throw new Error("Issue not found or already deleted");
-  }
-  else{
-    return 1
   }
 };
 
