@@ -2,8 +2,10 @@
 
 DevPulse is an internal tech issue and feature tracker built with Node.js, TypeScript, Express, PostgreSQL, and raw SQL. It allows team members to register, log in, create issues, view reported work, and manage issue updates based on their role.
 
+```
 **Live URL:** dev-pulse-luffy9.vercel.app
 **Author**: Md.Ashraful Alam Rayhan
+```
 
 ## Features
 
@@ -20,22 +22,20 @@ DevPulse is an internal tech issue and feature tracker built with Node.js, TypeS
 
 ## Tech Stack
 
-| Technology | Usage |
-| --- | ---|
-| Node.js(LTS) | Runtime|
-| TypeScript | Language |
-| Express.js | Web Framework |
-| PostgreSQL | Database |
+| Technology         | Usage                               |
+| ------------------ | ----------------------------------- |
+| Node.js(LTS)       | Runtime                             |
+| TypeScript         | Language                            |
+| Express.js         | Web Framework                       |
+| PostgreSQL         | Database                            |
 | Native `pg` driver | Raw sql queries with `pool.query()` |
-| `bcryptjs` | for password hashing |
-| `jsonwebtoken` | for JWT authentication |
-| `dotenv` | for environment configuration |
-| `cors` | for cross-origin requests |
-
-
-
+| `bcryptjs`         | for password hashing                |
+| `jsonwebtoken`     | for JWT authentication              |
+| `dotenv`           | for environment configuration       |
+| `cors`             | for cross-origin requests           |
 
 ## Project Structure
+
 ```
 ├── package.json
 ├── package-lock.json
@@ -94,11 +94,11 @@ JWT_SECRET=your_jwt_secret
 
 Environment variables:
 
-| Variable | Description |
-| --- | --- |
-| `PORT` | Port where the Express server will run |
-| `CONNECTIONSTRING` | PostgreSQL connection string |
-| `JWT_SECRET` | Secret key used to sign and verify JWT tokens |
+| Variable           | Description                                   |
+| ------------------ | --------------------------------------------- |
+| `PORT`             | Port where the Express server will run        |
+| `CONNECTIONSTRING` | PostgreSQL connection string                  |
+| `JWT_SECRET`       | Secret key used to sign and verify JWT tokens |
 
 ### 4. Run The Server
 
@@ -116,10 +116,10 @@ http://localhost:5000
 
 ## Available Scripts
 
-| Script | Description |
-| --- | --- |
+| Script        | Description                                    |
+| ------------- | ---------------------------------------------- |
 | `npm run dev` | Starts the development server with `tsx watch` |
-| `npm test` | Placeholder test script |
+| `npm test`    | Placeholder test script                        |
 
 ## API Endpoints
 
@@ -277,11 +277,11 @@ Access: Public
 
 Optional query parameters:
 
-| Parameter | Allowed Values | Description |
-| --- | --- | --- |
-| `sort` | `newest`, `oldest` | Sort issues by creation time |
-| `type` | `bug`, `feature_request` | Filter by issue type |
-| `status` | `open`, `in_progress`, `resolved` | Filter by workflow status |
+| Parameter | Allowed Values                    | Description                  |
+| --------- | --------------------------------- | ---------------------------- |
+| `sort`    | `newest`, `oldest`                | Sort issues by creation time |
+| `type`    | `bug`, `feature_request`          | Filter by issue type         |
+| `status`  | `open`, `in_progress`, `resolved` | Filter by workflow status    |
 
 Example:
 
@@ -409,10 +409,10 @@ Success response:
 
 ## Roles And Permissions
 
-| Role | Permissions |
-| --- | --- |
-| `contributor` | Register, log in, create issues, view issues, update own open issues |
-| `maintainer` | All contributor permissions, update any issue, update workflow status, delete any issue |
+| Role          | Permissions                                                                             |
+| ------------- | --------------------------------------------------------------------------------------- |
+| `contributor` | Register, log in, create issues, view issues, update own open issues                    |
+| `maintainer`  | All contributor permissions, update any issue, update workflow status, delete any issue |
 
 ## Database Schema
 
@@ -420,15 +420,15 @@ The application creates the following tables automatically on startup.
 
 ### users
 
-| Column | Type / Constraint |
-| --- | --- |
-| `id` | `SERIAL PRIMARY KEY` |
-| `name` | `VARCHAR(30) NOT NULL` |
-| `email` | `VARCHAR(50) NOT NULL UNIQUE` |
-| `password` | `TEXT NOT NULL` |
-| `role` | `VARCHAR(20) NOT NULL DEFAULT 'contributor'` |
-| `created_at` | `TIMESTAMP DEFAULT NOW()` |
-| `updated_at` | `TIMESTAMP DEFAULT NOW()` |
+| Column       | Type / Constraint                            |
+| ------------ | -------------------------------------------- |
+| `id`         | `SERIAL PRIMARY KEY`                         |
+| `name`       | `VARCHAR(30) NOT NULL`                       |
+| `email`      | `VARCHAR(50) NOT NULL UNIQUE`                |
+| `password`   | `TEXT NOT NULL`                              |
+| `role`       | `VARCHAR(20) NOT NULL DEFAULT 'contributor'` |
+| `created_at` | `TIMESTAMP DEFAULT NOW()`                    |
+| `updated_at` | `TIMESTAMP DEFAULT NOW()`                    |
 
 Allowed roles:
 
@@ -437,16 +437,16 @@ Allowed roles:
 
 ### issues
 
-| Column | Type / Constraint |
-| --- | --- |
-| `id` | `SERIAL PRIMARY KEY` |
-| `title` | `VARCHAR(150) NOT NULL` |
-| `description` | `TEXT NOT NULL CHECK(LENGTH(description) >= 20)` |
-| `type` | `VARCHAR(20) NOT NULL` |
-| `status` | `VARCHAR(20) NOT NULL DEFAULT 'open'` |
+| Column        | Type / Constraint                                     |
+| ------------- | ----------------------------------------------------- |
+| `id`          | `SERIAL PRIMARY KEY`                                  |
+| `title`       | `VARCHAR(150) NOT NULL`                               |
+| `description` | `TEXT NOT NULL CHECK(LENGTH(description) >= 20)`      |
+| `type`        | `VARCHAR(20) NOT NULL`                                |
+| `status`      | `VARCHAR(20) NOT NULL DEFAULT 'open'`                 |
 | `reporter_id` | `INT NOT NULL REFERENCES users(id) ON DELETE CASCADE` |
-| `created_at` | `TIMESTAMP DEFAULT NOW()` |
-| `updated_at` | `TIMESTAMP DEFAULT NOW()` |
+| `created_at`  | `TIMESTAMP DEFAULT NOW()`                             |
+| `updated_at`  | `TIMESTAMP DEFAULT NOW()`                             |
 
 Allowed issue types:
 
